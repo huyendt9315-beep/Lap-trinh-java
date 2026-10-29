@@ -1,0 +1,94 @@
+English: FreshVend - A Smart IoT-Enabled Automated Fruit Vending Machine with Real-Time Inventory and Cold Chain Management.
+3.1.2. Vietnamese: Fresh Vend - Máy bán trái cây tự động thông minh tích hợp IoT, quản lý tồn kho thời gian thực và chuỗi lạnh.
+(*) 3.2. Main proposal content (including result and product)
+a) Context:
+The fresh fruit retail landscape in Vietnamese urban areas faces a critical structural challenge: office workers, students, and residents in high-density buildings - particularly those with limited time for grocery shopping - lack convenient, hygienic, and round-the-clock access to fresh, pre-portioned fruit near their workplaces, campuses, and residential complexes.
+Currently, consumers must navigate a fragmented set of options: they rely on traditional wet markets with inconsistent operating hours, convenience stores with limited and often low-quality fruit selections, or delivery apps with high fees and unpredictable delivery times. This disjointed landscape leads to significant inconvenience, food waste from overbuying, and reduced access to fresh produce for time-constrained urban populations.
+For building operators and facility managers, the situation is equally problematic. Sourcing a reliable fresh-food vendor, negotiating space and revenue-sharing terms, and ensuring consistent product quality and hygiene standards must all be handled through informal, ad hoc arrangements. There is no turnkey, self-service solution for offering fresh fruit as a building amenity without dedicated staff.
+The gap in the market is clear: a modern, unattended, temperature-controlled vending solution that preserves fruit freshness through consistent cold-chain storage, provides a fast, touchscreen-based selection and payment experience, automates the physical dispensing mechanism without human intervention, and enables remote inventory monitoring and restocking alerts for operators — does not yet exist at scale in the Vietnamese vending market.
+This project — FreshVend — directly addresses these pain points by building a self-service, refrigerated fruit vending machine equipped with a touchscreen interface for product selection and payment, and an automated dispensing mechanism that delivers a fresh fruit bowl on demand, tailored specifically for office buildings, university campuses, and residential complexes in Vietnam.
+
+b) Proposed Solutions:
+Build an integrated hardware-software vending system — FreshVend — that serves as a fully automated, unattended fresh fruit retail point for end consumers and a centralized management tool for operators. The system provides six core pillars:
+(1) Touchscreen Ordering and Payment Module: Supports a 14-inch touchscreen interface displaying available fruit bowl options with pricing, images, and stock status, integrated with a payment gateway QR to complete a transaction end-to-end in under 30 seconds.
+(2) Automated Dispensing and Retrieval Mechanism: Integrates a servo-controlled shaft-based dispensing system that releases one fruit bowl at a time from vertically stacked columns upon payment confirmation, ensuring FIFO (first-in-first-out) stock rotation and jam-detection with automatic retry logic.
+(3) Cold Chain and Temperature Control Module: Maintains a consistent internal temperature (target range, e.g. 2-8°C) via a compressor-based refrigeration unit with real-time temperature logging, threshold alerts, and graceful degradation messaging to the touchscreen if cooling performance drops below acceptable levels.
+(4) Remote Inventory Monitoring and IoT Management Module: Provides operators with a cloud-connected dashboard showing real-time stock levels per column, low-stock and expiry alerts, sales transaction logs, and machine health metrics (temperature, door status, dispensing errors), enabling proactive restocking and maintenance.
+(5) Operator and Restocking Management Portal: Allows field staff to log in via the machine's admin interface or a companion mobile app to update product pricing, adjust column assignments, record restocking events, and clear fault states.
+(6) Sales and Business Analytics Dashboard: Aggregates transaction history, revenue by product and location, peak usage hours.
+
+c) Functional Requirements:
+3.2.1. End Consumer
+- As a Customer, I want to browse available fruit bowl options on a 14-inch touchscreen with high-quality images, pricing, and real-time stock status, so that I can make an informed purchase decision.
+- As a Customer, I want to select one or multiple fruit bowls and add them to a virtual cart, so that I can proceed to a unified payment process.
+- As a Customer, I want to complete my transaction using integrated payment gateways (QR code, e-wallet, or credit card) within 30 seconds, so that I can experience a fast and convenient checkout.
+- As a Customer, I want to receive my selected fruit bowl from the automated dispensing slot after a successful payment, ensuring that the product is delivered without human intervention.
+- As a Customer, I want to receive an on-screen notification or a digital receipt if a dispensing jam occurs, so that I am informed of the error and can follow the automated retry or refund instructions.
+3.2.2. Operator / Field Staff
+- As an Operator, I want to log in to the machine's admin interface or a companion mobile app securely, so that I can perform maintenance and restocking tasks.
+- As an Operator, I want to update product pricing and adjust column assignments for different fruit bowl varieties, so that the machine's inventory remains flexible and up-to-date.
+- As an Operator, I want to record restocking events and "clear" fault states (such as dispensing jams or sensor errors), so that the system maintains an accurate audit trail of all manual actions.
+- As an Operator, I want to receive real-time low-stock and upcoming product expiry alerts on my mobile device, so that I can proactively schedule restocking trips to prevent stockouts.
+- As an Operator, I want to view the machine's internal temperature logs and door status (open/closed), so that I can ensure the cold chain is maintained and the unit is physically secure.
+3.2.3. System Administrator / Manager
+- As an Administrator, I want to access a centralized cloud-connected dashboard to monitor the real-time status and health metrics of an entire fleet of vending machines, so that I can oversee regional operations efficiently.
+- As an Administrator, I want to manage user accounts and roles for operators and maintenance staff, so that I can control access permissions and ensure system security.
+- As an Administrator, I want to configure temperature threshold alerts and "graceful degradation" messages for the touchscreen, so that customers are notified if cooling performance drops below food-safety standards.
+- As an Administrator, I want to view detailed sales transaction logs and business analytics (revenue by product, location, and peak usage hours), so that I can make data-driven decisions on pricing and machine placement.
+- As an Administrator, I want to export operational and financial reports in PDF/CSV formats, so that I can support business auditing and inventory planning
+
+d) Non-Functional Requirements:
+Performance:
+- The system must complete a payment transaction process in under 30 seconds.
+- Core platform API responses must return within 500 milliseconds for 95% of requests under normal operational load.
+- IoT sensor data (temperature, machine status) must propagate to the management dashboard within 2 seconds via WebSocket.
+- Usability:
+• The 14-inch touchscreen interface must be intuitive, allowing customers to complete a purchase within a maximum of 5 user interactions.
+• The administration dashboard must be fully mobile-responsive to support field staff using various mobile devices.
+
+- Security:
+• All transaction data and user communications must be encrypted in transit using TLS 1.2+ and at rest using AES-256.
+• Role-Based Access Control (RBAC) must be strictly enforced at the API layer; field operators must not have access to high-level financial analytics reserved for Administrators.
+
+- Scalability:
+• The cloud infrastructure must support the simultaneous management of at least 1,000 vending machines without performance degradation.
+• The AI and IoT microservices must support horizontal scaling through containerized deployment (e.g., Docker).
+
+- Availability:
+• The vending machine interface must achieve 99.9% uptime to serve customers 24/7.
+• The system must include an "Offline Mode" for basic status displays or clear "Out of Order" messaging if cloud connectivity is lost or cooling performance fails.
+
+- Reliability:
+• The automated dispensing mechanism must maintain a failure/jam rate of less than 2% across all operational cycles.
+• The system must maintain the cold chain between 2-8°C consistently; any deviation must trigger immediate high-priority alerts.
+• All background processing jobs, such as inventory synchronization, must include retry mechanisms and dead-letter queuing to ensure data integrity.
+
+- Maintainability:
+• The codebase must follow clean architecture principles with a clear separation of concerns across layers.
+• API contracts must be fully documented via Swagger/OpenAPI and properly versioned to facilitate future upgrades.
+
+e) Theory & Practical:
+Students must apply an Agile/Scrum software development process and UML 2.0 system modeling methodology throughout the project. Required deliverables include:
+- User Requirements Specification (URS) and Software Requirements Specification (SRS).
+- System Architecture Design Document (including Component Diagram, Deployment Diagram, and ERD).
+- Detailed Design Document (API Specification, Database Schema, and UI Wireframes).
+- System Implementation Report and Test Plan/Test Report (Unit, Integration, and Performance testing).
+- Installation Guide and User Manuals (specifically for Customers, Operators, and Administrators).
+- Final deployable source code and Docker-based deployment packages.
+
+f) Products (Expected Deliverables):
+1. Centralized Management API: A complete, authenticated, and documented API serving all platform features including inventory, transactions, and cold chain logs.
+2. Vending Machine Client Application: An integrated touchscreen interface featuring product browsing, cart management, and payment gateway integration (QR/E-wallet).
+3. Automated Hardware Controller: A firmware module (ESP32-based) that manages the servo-driven dispensing mechanism and monitors real-time environmental data.
+4. Operator Mobile App: A specialized app for field staff to receive low-stock/expiry alerts and record restocking events.
+5. Admin Business Dashboard: A web portal for real-time fleet monitoring, cold chain analytics, and financial reporting.
+
+g) Proposed Tasks:
+Task Package 1: Database Design and Core REST API Development – Designing the relational database schema (PostgreSQL) and developing core backend services including authentication (JWT/OAuth2), role-based access control (RBAC), product inventory management, and transaction logic.
+Task Package 2: IoT Hardware and Firmware Integration – Developing firmware for the ESP32 microcontroller to control the servo-driven dispensing mechanism, integrating DHT22 sensors for cold chain monitoring, and implementing real-time data transmission to the cloud.
+Task Package 3: Touchscreen Customer Interface and Payment Integration – Developing the 14-inch touchscreen user interface for customers, focusing on the product browsing experience, cart management, and seamless integration with third-party payment gateways (QR codes, e-wallets).
+Task Package 4: Centralized Web Portal (Admin & Operator Dashboard) – Building a comprehensive, responsive web-based management portal. This includes an Administrator module (fleet monitoring, sales analytics) and an Operator module for field staff to handle restocking, manage product expiry, and receive system alerts via web notifications.
+Task Package 5: System Integration, Testing, and Deployment – Performing end-to-end integration of hardware and software components, conducting performance benchmarking (cold chain reliability and dispensing accuracy), containerizing services with Docker, and setting up CI/CD pipelines.
+Task Package 6: Project Documentation and Quality Assurance – Preparing all mandatory deliverables: SRS, Architecture & Detailed Design documents, API Documentation, Test Plan/Reports, Installation Guides, and User Manuals (Customer, Operator, Admin)
+Notice: All students are required to thoroughly understand the full system architecture, the IoT and hardware integration principles (including automated dispensing and cold chain management), and their individual module contributions. Every team member must be able to clearly explain the overall system design and their specific implementation to the viva committee.
+4. Other comments (propose all relative things if have):
