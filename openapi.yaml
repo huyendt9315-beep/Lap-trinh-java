@@ -1,0 +1,2547 @@
+openapi: 3.0.3
+info:
+  title: FreshVend API
+  version: 1.0.0
+  description: Hợp đồng FreshVend. Quyền gọi theo từng operation được ghi trong description và x-roles. OAuth thuộc dịch
+    vụ xác thực ngoài /api/v1.
+servers:
+- url: /api/v1
+paths:
+  /me:
+    get:
+      summary: Tài khoản hiện tại
+      operationId: fv1
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters: []
+      responses:
+        '200':
+          description: Tài khoản hiện tại
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  login:
+                    type: string
+                  role:
+                    type: string
+                  active:
+                    type: boolean
+                required:
+                - id
+                - login
+                - role
+                - active
+              example:
+                id: 2
+                login: nv01
+                role: OPERATOR
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /users:
+    get:
+      summary: Danh sách nhân viên
+      operationId: fv2
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Danh sách nhân viên
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    login:
+                      type: string
+                    role:
+                      type: string
+                    active:
+                      type: boolean
+                  required:
+                  - id
+                  - login
+                  - role
+                  - active
+              example:
+              - id: 2
+                login: nv01
+                role: OPERATOR
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+    post:
+      summary: Tạo nhân viên
+      operationId: fv3
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Tạo nhân viên
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  login:
+                    type: string
+                  role:
+                    type: string
+                  active:
+                    type: boolean
+                required:
+                - id
+                - login
+                - role
+                - active
+              example:
+                id: 2
+                login: nv01
+                role: OPERATOR
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+                role:
+                  type: string
+              required:
+              - login
+              - password
+              - role
+            example:
+              login: nv01
+              password: example-password
+              role: OPERATOR
+      x-roles:
+      - ADMIN
+  /users/{userId}:
+    patch:
+      summary: Đổi vai trò hoặc khóa tài khoản
+      operationId: fv4
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Đổi vai trò hoặc khóa tài khoản
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  login:
+                    type: string
+                  role:
+                    type: string
+                  active:
+                    type: boolean
+                required:
+                - id
+                - login
+                - role
+                - active
+              example:
+                id: 2
+                login: nv01
+                role: OPERATOR
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                role:
+                  type: string
+                active:
+                  type: boolean
+              required:
+              - role
+              - active
+            example:
+              role: OPERATOR
+              active: true
+      x-roles:
+      - ADMIN
+  /machines:
+    get:
+      summary: Giám sát đội máy
+      operationId: fv5
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Giám sát đội máy
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    code:
+                      type: string
+                    location:
+                      type: string
+                    status:
+                      type: string
+                    lastSeenAt:
+                      type: string
+                      format: date-time
+                      nullable: true
+                  required:
+                  - id
+                  - code
+                  - location
+                  - status
+                  - lastSeenAt
+              example:
+              - id: 1
+                code: FV01
+                location: UTH
+                status: ONLINE
+                lastSeenAt: '2026-11-07T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /machines/{machineId}/cold-chain:
+    put:
+      summary: Cấu hình cảnh báo
+      operationId: fv6
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Cấu hình cảnh báo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  minC:
+                    type: number
+                  maxC:
+                    type: number
+                  degradedMessage:
+                    type: string
+                required:
+                - minC
+                - maxC
+                - degradedMessage
+              example:
+                minC: 2
+                maxC: 8
+                degradedMessage: Máy tạm dừng bán
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                minC:
+                  type: number
+                maxC:
+                  type: number
+                degradedMessage:
+                  type: string
+              required:
+              - minC
+              - maxC
+              - degradedMessage
+            example:
+              minC: 2
+              maxC: 8
+              degradedMessage: Máy tạm dừng bán
+      x-roles:
+      - ADMIN
+  /products:
+    get:
+      summary: Danh mục sản phẩm
+      operationId: fv7
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Danh mục sản phẩm
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    sku:
+                      type: string
+                    name:
+                      type: string
+                    imageUrl:
+                      type: string
+                    priceVnd:
+                      type: integer
+                      format: int64
+                    active:
+                      type: boolean
+                  required:
+                  - id
+                  - sku
+                  - name
+                  - imageUrl
+                  - priceVnd
+                  - active
+              example:
+              - id: 9
+                sku: BOWL01
+                name: Trái cây hỗn hợp
+                imageUrl: https://example.org/bowl.jpg
+                priceVnd: 30000
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+    post:
+      summary: Thêm sản phẩm
+      operationId: fv8
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters: []
+      responses:
+        '201':
+          description: Thêm sản phẩm
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  sku:
+                    type: string
+                  name:
+                    type: string
+                  imageUrl:
+                    type: string
+                  priceVnd:
+                    type: integer
+                    format: int64
+                  active:
+                    type: boolean
+                required:
+                - id
+                - sku
+                - name
+                - imageUrl
+                - priceVnd
+                - active
+              example:
+                id: 9
+                sku: BOWL01
+                name: Trái cây hỗn hợp
+                imageUrl: https://example.org/bowl.jpg
+                priceVnd: 30000
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sku:
+                  type: string
+                name:
+                  type: string
+                imageUrl:
+                  type: string
+                priceVnd:
+                  type: integer
+                  format: int64
+              required:
+              - sku
+              - name
+              - imageUrl
+              - priceVnd
+            example:
+              sku: BOWL01
+              name: Trái cây hỗn hợp
+              imageUrl: https://example.org/bowl.jpg
+              priceVnd: 30000
+      x-roles:
+      - ADMIN
+  /products/{productId}/price:
+    patch:
+      summary: Điều chỉnh giá
+      operationId: fv9
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: productId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Điều chỉnh giá
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  sku:
+                    type: string
+                  name:
+                    type: string
+                  imageUrl:
+                    type: string
+                  priceVnd:
+                    type: integer
+                    format: int64
+                  active:
+                    type: boolean
+                required:
+                - id
+                - sku
+                - name
+                - imageUrl
+                - priceVnd
+                - active
+              example:
+                id: 9
+                sku: BOWL01
+                name: Trái cây hỗn hợp
+                imageUrl: https://example.org/bowl.jpg
+                priceVnd: 30000
+                active: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                priceVnd:
+                  type: integer
+                  format: int64
+              required:
+              - priceVnd
+            example:
+              priceVnd: 30000
+      x-roles:
+      - ADMIN
+      - OPERATOR
+  /machines/{machineId}/slots:
+    get:
+      summary: Xem tồn từng ngăn
+      operationId: fv10
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Xem tồn từng ngăn
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    machineId:
+                      type: integer
+                      format: int64
+                    slotNo:
+                      type: integer
+                      format: int32
+                    productId:
+                      type: integer
+                      format: int64
+                    capacity:
+                      type: integer
+                      format: int32
+                    lowThreshold:
+                      type: integer
+                      format: int32
+                    availableQty:
+                      type: integer
+                      format: int32
+                  required:
+                  - id
+                  - machineId
+                  - slotNo
+                  - productId
+                  - capacity
+                  - lowThreshold
+                  - availableQty
+              example:
+              - id: 4
+                machineId: 1
+                slotNo: 2
+                productId: 9
+                capacity: 12
+                lowThreshold: 2
+                availableQty: 6
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /slots/{slotId}/assignment:
+    put:
+      summary: Gán sản phẩm vào ngăn
+      operationId: fv11
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Gán sản phẩm vào ngăn
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  machineId:
+                    type: integer
+                    format: int64
+                  slotNo:
+                    type: integer
+                    format: int32
+                  productId:
+                    type: integer
+                    format: int64
+                  capacity:
+                    type: integer
+                    format: int32
+                  lowThreshold:
+                    type: integer
+                    format: int32
+                  availableQty:
+                    type: integer
+                    format: int32
+                required:
+                - id
+                - machineId
+                - slotNo
+                - productId
+                - capacity
+                - lowThreshold
+                - availableQty
+              example:
+                id: 4
+                machineId: 1
+                slotNo: 2
+                productId: 9
+                capacity: 12
+                lowThreshold: 2
+                availableQty: 0
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  format: int64
+                lowThreshold:
+                  type: integer
+                  format: int32
+              required:
+              - productId
+              - lowThreshold
+            example:
+              productId: 9
+              lowThreshold: 2
+      x-roles:
+      - ADMIN
+      - OPERATOR
+  /slots/{slotId}/lots:
+    post:
+      summary: Nhập hàng và ghi người nhập
+      operationId: fv12
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Nhập hàng và ghi người nhập
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  slotId:
+                    type: integer
+                    format: int64
+                  productId:
+                    type: integer
+                    format: int64
+                  operatorId:
+                    type: integer
+                    format: int64
+                  qtyIn:
+                    type: integer
+                    format: int32
+                  qtyOnHand:
+                    type: integer
+                    format: int32
+                  receivedAt:
+                    type: string
+                    format: date-time
+                  expiresAt:
+                    type: string
+                    format: date-time
+                required:
+                - id
+                - slotId
+                - productId
+                - operatorId
+                - qtyIn
+                - qtyOnHand
+                - receivedAt
+                - expiresAt
+              example:
+                id: 8
+                slotId: 4
+                productId: 9
+                operatorId: 2
+                qtyIn: 6
+                qtyOnHand: 6
+                receivedAt: '2026-11-07T10:00:00Z'
+                expiresAt: '2026-11-09T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  format: int64
+                qtyIn:
+                  type: integer
+                  format: int32
+                expiresAt:
+                  type: string
+                  format: date-time
+              required:
+              - productId
+              - qtyIn
+              - expiresAt
+            example:
+              productId: 9
+              qtyIn: 6
+              expiresAt: '2026-11-09T10:00:00Z'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+    get:
+      summary: Xem lịch sử nhập
+      operationId: fv13
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: slotId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Xem lịch sử nhập
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    slotId:
+                      type: integer
+                      format: int64
+                    productId:
+                      type: integer
+                      format: int64
+                    operatorId:
+                      type: integer
+                      format: int64
+                    qtyIn:
+                      type: integer
+                      format: int32
+                    qtyOnHand:
+                      type: integer
+                      format: int32
+                    receivedAt:
+                      type: string
+                      format: date-time
+                    expiresAt:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - slotId
+                  - productId
+                  - operatorId
+                  - qtyIn
+                  - qtyOnHand
+                  - receivedAt
+                  - expiresAt
+              example:
+              - id: 8
+                slotId: 4
+                productId: 9
+                operatorId: 2
+                qtyIn: 6
+                qtyOnHand: 6
+                receivedAt: '2026-11-07T10:00:00Z'
+                expiresAt: '2026-11-09T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+  /lots/{lotId}/removals:
+    post:
+      summary: Xác nhận lấy hàng hết hạn
+      operationId: fv14
+      description: 'Quyền: ADMIN/OPERATOR'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: lotId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Xác nhận lấy hàng hết hạn
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  lotId:
+                    type: integer
+                    format: int64
+                  qtyOnHand:
+                    type: integer
+                    format: int32
+                required:
+                - lotId
+                - qtyOnHand
+              example:
+                lotId: 8
+                qtyOnHand: 5
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                qty:
+                  type: integer
+                  format: int32
+                reason:
+                  type: string
+              required:
+              - qty
+              - reason
+            example:
+              qty: 1
+              reason: EXPIRED
+      x-roles:
+      - ADMIN
+      - OPERATOR
+  /machines/{machineId}/catalog:
+    get:
+      summary: Danh sách hiển thị cho khách
+      operationId: fv15
+      description: 'Quyền: KIOSK'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Danh sách hiển thị cho khách
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  machineId:
+                    type: integer
+                    format: int64
+                  status:
+                    type: string
+                  message:
+                    type: string
+                  products:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                        sku:
+                          type: string
+                        name:
+                          type: string
+                        imageUrl:
+                          type: string
+                        priceVnd:
+                          type: integer
+                          format: int64
+                        active:
+                          type: boolean
+                        availableQty:
+                          type: integer
+                          format: int32
+                      required:
+                      - id
+                      - sku
+                      - name
+                      - imageUrl
+                      - priceVnd
+                      - active
+                      - availableQty
+                required:
+                - machineId
+                - status
+                - message
+                - products
+              example:
+                machineId: 1
+                status: ONLINE
+                message: ''
+                products:
+                - id: 9
+                  sku: BOWL01
+                  name: Trái cây hỗn hợp
+                  imageUrl: https://example.org/bowl.jpg
+                  priceVnd: 30000
+                  active: true
+                  availableQty: 6
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - KIOSK
+  /machines/{machineId}/orders:
+    post:
+      summary: Tạo đơn và giữ hàng
+      operationId: fv16
+      description: 'Quyền: KIOSK'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Tạo đơn và giữ hàng
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  receiptNo:
+                    type: string
+                  status:
+                    type: string
+                  totalVnd:
+                    type: integer
+                    format: int64
+                  reservationUntil:
+                    type: string
+                    format: date-time
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: integer
+                          format: int64
+                        qty:
+                          type: integer
+                          format: int32
+                        unitPriceVnd:
+                          type: integer
+                          format: int64
+                      required:
+                      - productId
+                      - qty
+                      - unitPriceVnd
+                required:
+                - id
+                - receiptNo
+                - status
+                - totalVnd
+                - reservationUntil
+                - items
+              example:
+                id: 31
+                receiptNo: FV-31
+                status: AWAITING_PAYMENT
+                totalVnd: 30000
+                reservationUntil: '2026-11-07T10:05:00Z'
+                items:
+                - productId: 9
+                  qty: 1
+                  unitPriceVnd: 30000
+          headers:
+            Order-Token:
+              description: Khóa bí mật của phiên mua
+              schema:
+                type: string
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      productId:
+                        type: integer
+                        format: int64
+                      qty:
+                        type: integer
+                        format: int32
+                    required:
+                    - productId
+                    - qty
+              required:
+              - items
+            example:
+              items:
+              - productId: 9
+                qty: 1
+      x-roles:
+      - KIOSK
+  /orders/{orderId}/payments:
+    post:
+      summary: Khởi tạo thanh toán
+      operationId: fv17
+      description: 'Quyền: KIOSK'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: Order-Token
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '201':
+          description: Khởi tạo thanh toán
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  orderId:
+                    type: integer
+                    format: int64
+                  amountVnd:
+                    type: integer
+                    format: int64
+                  status:
+                    type: string
+                  checkoutUrl:
+                    type: string
+                    nullable: true
+                required:
+                - id
+                - orderId
+                - amountVnd
+                - status
+                - checkoutUrl
+              example:
+                id: 70
+                orderId: 31
+                amountVnd: 30000
+                status: PENDING
+                checkoutUrl: https://example.org/checkout/70
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                method:
+                  type: string
+              required:
+              - method
+            example:
+              method: QR
+      x-roles:
+      - KIOSK
+  /orders/{orderId}:
+    get:
+      summary: Tra đơn và biên nhận
+      operationId: fv18
+      description: 'Quyền: KIOSK'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: Order-Token
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Tra đơn và biên nhận
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  receiptNo:
+                    type: string
+                  status:
+                    type: string
+                  totalVnd:
+                    type: integer
+                    format: int64
+                  reservationUntil:
+                    type: string
+                    format: date-time
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        productId:
+                          type: integer
+                          format: int64
+                        qty:
+                          type: integer
+                          format: int32
+                        unitPriceVnd:
+                          type: integer
+                          format: int64
+                      required:
+                      - productId
+                      - qty
+                      - unitPriceVnd
+                  payments:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                        orderId:
+                          type: integer
+                          format: int64
+                        amountVnd:
+                          type: integer
+                          format: int64
+                        status:
+                          type: string
+                        checkoutUrl:
+                          type: string
+                          nullable: true
+                      required:
+                      - id
+                      - orderId
+                      - amountVnd
+                      - status
+                      - checkoutUrl
+                  dispenses:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                        status:
+                          type: string
+                      required:
+                      - id
+                      - status
+                  refunds:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - paymentId
+                      - amountVnd
+                      - status
+                      properties:
+                        id:
+                          type: integer
+                          format: int64
+                        paymentId:
+                          type: integer
+                          format: int64
+                        dispenseId:
+                          type: integer
+                          format: int64
+                          nullable: true
+                        amountVnd:
+                          type: integer
+                          format: int64
+                        status:
+                          type: string
+                required:
+                - id
+                - receiptNo
+                - status
+                - totalVnd
+                - reservationUntil
+                - items
+                - payments
+                - dispenses
+                - refunds
+              example:
+                id: 31
+                receiptNo: FV-31
+                status: AWAITING_PAYMENT
+                totalVnd: 30000
+                reservationUntil: '2026-11-07T10:05:00Z'
+                items:
+                - productId: 9
+                  qty: 1
+                  unitPriceVnd: 30000
+                payments:
+                - id: 70
+                  orderId: 31
+                  amountVnd: 30000
+                  status: PENDING
+                  checkoutUrl: https://example.org/checkout/70
+                dispenses:
+                - id: 12
+                  status: RESERVED
+                refunds: []
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - KIOSK
+  /gateway/payment-events:
+    post:
+      summary: Cổng báo kết quả thu tiền
+      operationId: fv19
+      description: 'Quyền: GATEWAY'
+      security:
+      - gatewaySignature: []
+      parameters: []
+      responses:
+        '200':
+          description: Cổng báo kết quả thu tiền
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+                required:
+                - accepted
+              example:
+                accepted: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventKey:
+                  type: string
+                  format: uuid
+                paymentId:
+                  type: integer
+                  format: int64
+                providerRef:
+                  type: string
+                amountVnd:
+                  type: integer
+                  format: int64
+                status:
+                  type: string
+              required:
+              - eventKey
+              - paymentId
+              - providerRef
+              - amountVnd
+              - status
+            example:
+              eventKey: 123e4567-e89b-42d3-a456-426614174000
+              paymentId: 70
+              providerRef: TX70
+              amountVnd: 30000
+              status: SUCCEEDED
+      x-roles:
+      - GATEWAY
+  /gateway/refund-events:
+    post:
+      summary: Cổng xác nhận hoàn tiền
+      operationId: fv20
+      description: 'Quyền: GATEWAY'
+      security:
+      - gatewaySignature: []
+      parameters: []
+      responses:
+        '200':
+          description: Cổng xác nhận hoàn tiền
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+                required:
+                - accepted
+              example:
+                accepted: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventKey:
+                  type: string
+                  format: uuid
+                refundId:
+                  type: integer
+                  format: int64
+                providerRef:
+                  type: string
+                amountVnd:
+                  type: integer
+                  format: int64
+                status:
+                  type: string
+              required:
+              - eventKey
+              - refundId
+              - providerRef
+              - amountVnd
+              - status
+            example:
+              eventKey: 123e4567-e89b-42d3-a456-426614174000
+              refundId: 6
+              providerRef: RF6
+              amountVnd: 30000
+              status: SUCCEEDED
+      x-roles:
+      - GATEWAY
+  /machines/{machineId}/commands:
+    get:
+      summary: Máy đọc các lệnh được phép chạy
+      operationId: fv21
+      description: 'Quyền: DEVICE'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Máy đọc các lệnh được phép chạy
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    commandKey:
+                      type: string
+                      format: uuid
+                    dispenseId:
+                      type: integer
+                      format: int64
+                    slotNo:
+                      type: integer
+                      format: int32
+                    attemptNo:
+                      type: integer
+                      format: int32
+                  required:
+                  - commandKey
+                  - dispenseId
+                  - slotNo
+                  - attemptNo
+              example:
+              - commandKey: 123e4567-e89b-42d3-a456-426614174000
+                dispenseId: 12
+                slotNo: 2
+                attemptNo: 1
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - DEVICE
+  /machines/{machineId}/dispense-events:
+    post:
+      summary: Máy báo kết quả cấp phát
+      operationId: fv22
+      description: 'Quyền: DEVICE'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Máy báo kết quả cấp phát
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+                required:
+                - accepted
+              example:
+                accepted: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commandKey:
+                  type: string
+                  format: uuid
+                eventKey:
+                  type: string
+                  format: uuid
+                attemptNo:
+                  type: integer
+                  format: int32
+                result:
+                  type: string
+              required:
+              - commandKey
+              - eventKey
+              - attemptNo
+              - result
+            example:
+              commandKey: 123e4567-e89b-42d3-a456-426614174000
+              eventKey: 123e4567-e89b-42d3-a456-426614174000
+              attemptNo: 1
+              result: DELIVERED
+      x-roles:
+      - DEVICE
+  /machines/{machineId}/telemetry:
+    post:
+      summary: Nhận mẫu cảm biến và cửa máy
+      operationId: fv23
+      description: 'Quyền: DEVICE'
+      security:
+      - machineOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Nhận mẫu cảm biến và cửa máy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accepted:
+                    type: boolean
+                required:
+                - accepted
+              example:
+                accepted: true
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                eventKey:
+                  type: string
+                  format: uuid
+                measuredAt:
+                  type: string
+                  format: date-time
+                tempC:
+                  type: number
+                  nullable: true
+                humidityPct:
+                  type: number
+                  nullable: true
+                doorOpen:
+                  type: boolean
+                  nullable: true
+                deviceState:
+                  type: string
+              required:
+              - eventKey
+              - measuredAt
+              - tempC
+              - humidityPct
+              - doorOpen
+              - deviceState
+            example:
+              eventKey: 123e4567-e89b-42d3-a456-426614174000
+              measuredAt: '2026-11-07T10:00:00Z'
+              tempC: 8.1
+              humidityPct: 65
+              doorOpen: false
+              deviceState: ONLINE
+      x-roles:
+      - DEVICE
+    get:
+      summary: Đọc nhật ký thiết bị
+      operationId: fv24
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Đọc nhật ký thiết bị
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    eventKey:
+                      type: string
+                      format: uuid
+                    measuredAt:
+                      type: string
+                      format: date-time
+                    tempC:
+                      type: number
+                      nullable: true
+                    humidityPct:
+                      type: number
+                      nullable: true
+                    doorOpen:
+                      type: boolean
+                      nullable: true
+                    deviceState:
+                      type: string
+                  required:
+                  - eventKey
+                  - measuredAt
+                  - tempC
+                  - humidityPct
+                  - doorOpen
+                  - deviceState
+              example:
+              - eventKey: 123e4567-e89b-42d3-a456-426614174000
+                measuredAt: '2026-11-07T10:00:00Z'
+                tempC: 8.1
+                humidityPct: 65
+                doorOpen: false
+                deviceState: ONLINE
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /machines/{machineId}/alerts:
+    get:
+      summary: Xem cảnh báo
+      operationId: fv25
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: machineId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Xem cảnh báo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    machineId:
+                      type: integer
+                      format: int64
+                    kind:
+                      type: string
+                    severity:
+                      type: string
+                    openedAt:
+                      type: string
+                      format: date-time
+                  required:
+                  - id
+                  - machineId
+                  - kind
+                  - severity
+                  - openedAt
+              example:
+              - id: 7
+                machineId: 1
+                kind: HIGH_TEMP
+                severity: HIGH
+                openedAt: '2026-11-07T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /alerts/{alertId}/resolution:
+    post:
+      summary: Đóng sự cố
+      operationId: fv26
+      description: 'Quyền: ADMIN/OPERATOR/MAINTENANCE'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: alertId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 1
+      responses:
+        '200':
+          description: Đóng sự cố
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    format: int64
+                  resolvedBy:
+                    type: integer
+                    format: int64
+                  resolvedAt:
+                    type: string
+                    format: date-time
+                required:
+                - id
+                - resolvedBy
+                - resolvedAt
+              example:
+                id: 7
+                resolvedBy: 2
+                resolvedAt: '2026-11-07T10:00:00Z'
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                resolution:
+                  type: string
+              required:
+              - resolution
+            example:
+              resolution: Đã kiểm tra máy
+      x-roles:
+      - ADMIN
+      - OPERATOR
+      - MAINTENANCE
+  /transactions:
+    get:
+      summary: Nhật ký giao dịch
+      operationId: fv27
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      responses:
+        '200':
+          description: Nhật ký giao dịch
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      format: int64
+                    orderId:
+                      type: integer
+                      format: int64
+                    amountVnd:
+                      type: integer
+                      format: int64
+                    status:
+                      type: string
+                    checkoutUrl:
+                      type: string
+                      nullable: true
+                  required:
+                  - id
+                  - orderId
+                  - amountVnd
+                  - status
+                  - checkoutUrl
+              example:
+              - id: 70
+                orderId: 31
+                amountVnd: 30000
+                status: PENDING
+                checkoutUrl: https://example.org/checkout/70
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+  /reports/sales:
+    get:
+      summary: Thống kê doanh thu
+      operationId: fv28
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+          minimum: 0
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 200
+      - name: groupBy
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - product
+          - location
+          - hour
+        example: location
+      - name: start
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        example: '2026-11-07T10:00:00Z'
+      - name: end
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        example: '2026-11-08T10:00:00Z'
+      responses:
+        '200':
+          description: Thống kê doanh thu
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    group:
+                      type: string
+                    grossVnd:
+                      type: integer
+                      format: int64
+                    refundVnd:
+                      type: integer
+                      format: int64
+                    netVnd:
+                      type: integer
+                      format: int64
+                  required:
+                  - group
+                  - grossVnd
+                  - refundVnd
+                  - netVnd
+              example:
+              - group: UTH
+                grossVnd: 30000
+                refundVnd: 0
+                netVnd: 30000
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+  /reports/export:
+    get:
+      summary: Xuất báo cáo
+      operationId: fv29
+      description: 'Quyền: ADMIN'
+      security:
+      - staffOAuth: []
+      parameters:
+      - name: kind
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - financial
+          - operational
+        example: financial
+      - name: format
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - csv
+          - pdf
+        example: csv
+      - name: start
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        example: '2026-11-07T10:00:00Z'
+      - name: end
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        example: '2026-11-08T10:00:00Z'
+      responses:
+        '200':
+          description: Xuất báo cáo
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/E400'
+        '401':
+          $ref: '#/components/responses/E401'
+        '403':
+          $ref: '#/components/responses/E403'
+        '404':
+          $ref: '#/components/responses/E404'
+        '409':
+          $ref: '#/components/responses/E409'
+        '503':
+          $ref: '#/components/responses/E503'
+      x-roles:
+      - ADMIN
+components:
+  securitySchemes:
+    staffOAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: /oauth2/authorize
+          tokenUrl: /oauth2/token
+          scopes: {}
+      description: 'Authorization Code với PKCE S256. API nhận access token JWT qua Authorization: Bearer.'
+    gatewaySignature:
+      type: apiKey
+      in: header
+      name: X-Signature
+    machineOAuth:
+      type: oauth2
+      description: Token hệ thống dùng JWT, ràng buộc machineId và audience tương ứng KIOSK hoặc DEVICE. Thông tin client
+        lưu ở dịch vụ tin cậy.
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}
+  responses:
+    E400:
+      description: Dữ liệu sai
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Dữ liệu sai
+            traceId: req-01
+    E401:
+      description: Thông tin xác thực không hợp lệ
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Thông tin xác thực không hợp lệ
+            traceId: req-01
+    E403:
+      description: Thiếu quyền
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Thiếu quyền
+            traceId: req-01
+    E404:
+      description: Không tìm thấy
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Không tìm thấy
+            traceId: req-01
+    E409:
+      description: Xung đột trạng thái
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Xung đột trạng thái
+            traceId: req-01
+    E503:
+      description: Dịch vụ tạm gián đoạn
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: string
+              message:
+                type: string
+              traceId:
+                type: string
+            required:
+            - code
+            - message
+            - traceId
+          example:
+            code: REQUEST_ERROR
+            message: Dịch vụ tạm gián đoạn
+            traceId: req-01
