@@ -362,3 +362,129 @@ VII. Các điểm cần lưu ý trước khi chốt phân công
 • Thanh toán: Không nên tuyên bố đã tích hợp cổng thanh toán thật nếu nhóm chỉ làm giao diện hoặc mô phỏng.
 • Operator Mobile App: Cần làm rõ với giảng viên nếu nhóm muốn thay bằng dashboard web responsive.
 • Bảo mật và hiệu năng: Các mục như TLS 1.2+, AES-256, API phản hồi trong 500 ms đối với 95% yêu cầu, dữ liệu IoT cập nhật trong 2 giây và Docker là các mục tiêu trong đề. Nhóm cần ghi rõ mục nào đã triển khai, mục nào đã kiểm thử và mục nào chưa thực hiện được; không tự nhận đạt nếu chưa có bằng chứng.
+Mọi người ơi, phần 02_URS-SRS.md của tui đã làm rồi nha. Mọi người dựa vào tài liệu này và đề gốc FreshVend để triển khai đúng phần được phân công. Tui bổ sung đầy đủ các đầu việc và hạn nộp để nhóm mình không bị thiếu yêu cầu của thầy. 
+
+1. PHÂN CÔNG VÀ HẠN NỘP TÀI LIỆU 
+
+TV2 – Backend & Database 
+
+06/11: 04_Database-Design.md – Thiết kế PostgreSQL, các bảng dữ liệu, thuộc tính, khóa chính, khóa ngoại, quan hệ giữa các bảng và sơ đồ ERD. 
+
+07/11: 05_API-Specification.md – Thiết kế REST API, endpoint, request/response, mã trạng thái, JWT/OAuth2, RBAC, Swagger/OpenAPI. 
+
+TV3 – IoT 
+
+08/11: 07_IoT-Design.md – Thiết kế ESP32, DHT22, servo, sơ đồ kết nối, xuất hàng FIFO, phát hiện kẹt hàng, thử lại, theo dõi nhiệt độ 2–8°C, trạng thái cửa, cảnh báo và truyền dữ liệu về backend. 
+
+TV4 – Giao diện khách hàng 
+
+09/11: Phần Customer trong 06_UI-Wireframes.md – Thiết kế giao diện cảm ứng 14 inch, danh sách sản phẩm, giỏ hàng, thanh toán QR/e-wallet, kết quả giao dịch, biên nhận và thông báo lỗi. 
+
+TV5 – Admin/Operator 
+
+09/11: Phần Admin/Operator trong 06_UI-Wireframes.md – Thiết kế Dashboard quản lý nhiều máy, tồn kho, nhập hàng, cảnh báo hàng sắp hết/hết hạn, nhiệt độ, doanh thu, báo cáo và Operator Mobile App. 
+
+TV1 – Nhóm trưởng 
+
+10/11: Hoàn thiện 03_Architecture.md, gồm kiến trúc tổng thể, Component Diagram, Deployment Diagram, luồng kết nối giữa các module; tổng hợp Use Case, Activity Diagram, Project Plan và nội dung Agile/Scrum. 
+
+TV2, TV3, TV4 và TV5 cung cấp sơ đồ, thông tin kỹ thuật và quy trình nghiệp vụ thuộc phần mình để tui tổng hợp. 
+
+2. PHÂN CÔNG CODE VÀ HẠN NỘP 
+
+Tuần này ưu tiên hoàn thành tài liệu thiết kế. Bạn nào làm xong sớm thì tranh thủ code luôn, không cần đợi đến tuần sau nha. 
+
+TV2 – Backend Java Web 
+
+11/11: Hoàn thành Database PostgreSQL, kết nối Java Web và REST API cơ bản. 
+
+12/11: Hoàn thành đăng nhập, JWT/OAuth2, RBAC, quản lý sản phẩm, tồn kho, giao dịch, nhật ký nhiệt độ, WebSocket và xử lý đồng bộ dữ liệu. 
+
+TV3 – IoT 
+
+11/11: Hoàn thành code ESP32, đọc dữ liệu DHT22 và điều khiển servo. 
+
+12/11: Hoàn thành xuất hàng FIFO, phát hiện kẹt hàng và thử lại, cảnh báo nhiệt độ, trạng thái cửa, xử lý lỗi thiết bị và truyền dữ liệu về backend. 
+
+TV4 – Giao diện khách hàng 
+
+11/11: Hoàn thành code giao diện cảm ứng, hiển thị sản phẩm, chọn sản phẩm và giỏ hàng. 
+
+12/11: Hoàn thành thanh toán QR/e-wallet, hiển thị kết quả giao dịch, trạng thái xuất hàng, biên nhận, thông báo lỗi và kết nối API. Chú ý yêu cầu mua hàng tối đa 5 thao tác và mục tiêu thanh toán dưới 30 giây. 
+
+TV5 – Admin/Operator 
+
+11/11: Hoàn thành code Dashboard quản lý máy, sản phẩm, tồn kho và nhập hàng. 
+
+12/11: Hoàn thành giám sát nhiệt độ, cảnh báo, quản lý hạn sử dụng, thống kê doanh thu, xuất báo cáo PDF/CSV, chức năng Operator Mobile App và kết nối API. 
+
+TV1 – Nhóm trưởng 
+
+11–12/11: Theo dõi tiến độ, kiểm tra GitHub, tổng hợp tài liệu và chuẩn bị báo cáo chung. 
+
+13/11: Tổng hợp kết quả kiểm thử, báo cáo triển khai, hướng dẫn cài đặt, hướng dẫn sử dụng và slide từ nội dung các thành viên cung cấp. 
+
+3. PHÂN CÔNG KIỂM THỬ VÀ TÀI LIỆU CUỐI KỲ 
+
+Hạn 13/11: 
+
+TV2: Unit Test Backend, API và Performance Test; cung cấp kết quả kiểm thử. 
+
+TV3: Kiểm thử ESP32, cảm biến nhiệt độ, servo, xuất hàng, xử lý lỗi và gửi dữ liệu. 
+
+TV4: Kiểm thử quy trình mua hàng từ chọn sản phẩm đến thanh toán và xuất hàng; viết hướng dẫn sử dụng cho Customer. 
+
+TV5: Điều phối Integration Test, kiểm thử Dashboard, Operator Mobile App; viết hướng dẫn Operator/Admin và tổng hợp cấu hình cài đặt. 
+
+TV1: Tổng hợp 08_Test-Plan.md, 09_Test-Report.md, 10_User-Manual.md, báo cáo triển khai và tài liệu chung từ kết quả các thành viên cung cấp. 
+
+Hạn 14/11: 
+
+TV2 và TV5 phối hợp hoàn thiện cấu hình Docker, TV3 và TV4 hỗ trợ phần cấu hình liên quan. 
+
+Các thành viên hoàn thiện source code, sửa lỗi và cập nhật GitHub. 
+
+TV1 kiểm tra toàn bộ tài liệu, báo cáo, slide và lịch sử Git. 
+
+4. TIẾN ĐỘ CHUNG 
+
+04–09/11: Hoàn thành tài liệu thiết kế, tranh thủ code những phần đã thống nhất. 
+
+10/11: Hoàn thiện Architecture và thống nhất kết nối hệ thống. 
+
+11–12/11: Hoàn thành các chức năng lập trình chính. 
+
+13/11: Tích hợp, kiểm thử, sửa lỗi và tổng hợp tài liệu. 
+
+14/11: Mục tiêu hoàn thành toàn bộ Project, source code, Docker, báo cáo và slide. 
+
+15–20/11: Dự phòng kiểm tra, chỉnh sửa, bổ sung và luyện thuyết trình. 
+
+21/11: Hạn nộp chính thức của thầy. 
+
+LƯU Ý CHUNG 
+
+Nội dung và code phải bám sát đề gốc FreshVend, thống nhất với URS/SRS. 
+
+TV2 chia sẻ thiết kế Database và API sớm để TV3, TV4 và TV5 kết nối. 
+
+TV4 và TV5 phối hợp làm UI Wireframes, tránh trùng hoặc ghi đè nội dung. 
+
+Các thành viên phải đảm bảo phần mình có thể kết nối và chạy chung với hệ thống, không chỉ làm riêng lẻ. 
+
+Các yêu cầu về bảo mật, hiệu năng, WebSocket, IoT, chuỗi lạnh, thanh toán, Offline Mode và Docker cần được xem xét trong quá trình thực hiện. 
+
+Những chỉ tiêu như API dưới 500 ms, dữ liệu IoT cập nhật trong 2 giây, khả năng quản lý 1.000 máy, uptime 99,9% và tỷ lệ lỗi xuất hàng dưới 2% cần có kết quả kiểm thử nếu báo cáo là đạt. 
+
+Nếu chưa có phần cứng hoặc chưa thể tích hợp thanh toán thật thì phải ghi rõ phần mô phỏng và trao đổi với thầy về phương án thực hiện. 
+
+Operator Mobile App là một sản phẩm riêng trong đề; nếu muốn thay bằng web responsive thì cần được thầy đồng ý. 
+
+Mỗi người tự commit công việc thực tế và phải nắm được phần mình làm cũng như kiến trúc chung để giải thích khi bảo vệ. 
+
+Nếu có khó khăn hoặc nguy cơ trễ hạn thì báo sớm để nhóm hỗ trợ. 
+
+Mục tiêu nội bộ là hoàn thành trước ngày 14/11/2026, để còn đúng 1 tuần dự phòng trước hạn chính thức 21/11. 
+
+Thời gian khá gấp nên mọi người cố gắng chủ động làm sớm, xong phần nào cập nhật GitHub phần đó nha. Nếu có gì chưa rõ thì trao đổi trong nhóm để thống nhất trước khi làm. 
+
